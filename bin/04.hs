@@ -55,6 +55,9 @@ main = do
             let p1 = sum $ map part1 (cards parsedContent)
             print p1
 
+            let p2 = foldl part2 defaultCopies (cards parsedContent)
+            print (total p2)
+
 winnings :: Card -> Int
 winnings c = length (filter (\x -> x `elem` winning c) (have c))
 
@@ -62,5 +65,30 @@ part1 :: Card -> Int
 part1 c = do 
     let x = winnings c
     if x == 0 then 0 else 2^(x-1)
-    
+
+data CopiesAgrregate = Copies {
+    total :: Int,
+    extras :: [Int]
+} deriving (Show, Eq)
+
+defaultCopies :: CopiesAgrregate
+defaultCopies = Copies {total=0, extras=[]}
+
+part2 :: CopiesAgrregate -> Card -> CopiesAgrregate
+part2 agrr card = do
+    let wins = winnings card
+    let (copies, rest) = headAndRest (extras agrr)
+    let e = replicate wins (copies + 1)
+    let extras = zipWithPadding 0 rest e
+    Copies {total=total agrr + 1 + copies, extras=extras}
+
+zipWithPadding :: Int -> [Int] -> [Int] -> [Int]
+zipWithPadding a (x:xs) (y:ys) = x + y : zipWithPadding a xs ys
+zipWithPadding a []     ys     = zipWith (+) (repeat a) ys
+zipWithPadding a xs     []     = zipWith (+) xs (repeat a)
+
+headAndRest :: [Int] -> (Int, [Int])
+headAndRest [] = (0, [])
+headAndRest (x:rest) = (x, rest)
+
 
