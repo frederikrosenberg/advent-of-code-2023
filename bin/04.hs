@@ -45,7 +45,7 @@ pInput = do
     eof
     return (Input i)
 
-main = do 
+main = do
     content <- readFile "../input/04.txt"
     let result = parse pInput "" (pack content)
 
@@ -62,7 +62,7 @@ winnings :: Card -> Int
 winnings c = length (filter (\x -> x `elem` winning c) (have c))
 
 part1 :: Card -> Int
-part1 c = do 
+part1 c = do
     let x = winnings c
     if x == 0 then 0 else 2^(x-1)
 
@@ -79,13 +79,13 @@ part2 agrr card = do
     let wins = winnings card
     let (copies, rest) = headAndRest (extras agrr)
     let e = replicate wins (copies + 1)
-    let extras = zipWithPadding 0 rest e
+    let extras = addCombine rest e
     Copies {total=total agrr + 1 + copies, extras=extras}
 
-zipWithPadding :: Int -> [Int] -> [Int] -> [Int]
-zipWithPadding a (x:xs) (y:ys) = x + y : zipWithPadding a xs ys
-zipWithPadding a []     ys     = zipWith (+) (repeat a) ys
-zipWithPadding a xs     []     = zipWith (+) xs (repeat a)
+addCombine :: [Int] -> [Int] -> [Int]
+addCombine (x:xs) (y:ys) = x + y : addCombine xs ys
+addCombine []     ys     = ys
+addCombine xs     []     = xs
 
 headAndRest :: [Int] -> (Int, [Int])
 headAndRest [] = (0, [])
