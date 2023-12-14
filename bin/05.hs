@@ -121,9 +121,6 @@ mapRangeSourceMap r m = do
     then Just Range {start = s + mapValue m, len = e - s}
     else Nothing
 
-simplifyRanges :: [Range] -> [Range]
-simplifyRanges ranges = ranges
-
 mapToNext :: Int -> [SourceMap] -> Int
 mapToNext value sourceMap = do
   let m = find (\x -> input x <= value && value < input x + range x) sourceMap
