@@ -5,7 +5,6 @@ import Data.Maybe (catMaybes)
 import Data.Text (Text, pack)
 import qualified Data.Text as T
 import Data.Void
-import GHC.SourceGen (do')
 import Text.Megaparsec hiding (State)
 import Text.Megaparsec.Char
 import qualified Text.Megaparsec.Char.Lexer as L
